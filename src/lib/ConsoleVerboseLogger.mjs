@@ -1,8 +1,7 @@
 import winston, { format } from 'winston'
+import { DEFAULT_META, DEFAULT_CONFIG } from './WinstonConfig.mjs'
 
-const { combine, timestamp, printf } = format
-
-const codeFlowLogFormatter = (logObj = {}) => {
+const customFormatter = (logObj = {}) => {
   let data
   const splat = logObj[Symbol.for('splat')]
 
@@ -23,42 +22,14 @@ const codeFlowLogFormatter = (logObj = {}) => {
   return JSON.stringify(formattedLog)
 }
 
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  debug: 3,
-  trace: 4
-}
-
-const level = 'trace'
-
-const {
-  npm_package_name: pkgName = '',
-  npm_package_version: pkgVersion = ''
-} = process.env
-
-const service = `${pkgName}@${pkgVersion}`
-
-const type = 'CODE_FLOW_LOG'
-
-const defaultMeta = { service, type }
-
-const transports = [
-  new winston.transports.Console()
-]
-
-const formats = combine(
-  timestamp({ format: 'isoDateTime' }),
-  printf(codeFlowLogFormatter)
+const formats = format.combine(
+  format.timestamp({ format: 'isoDateTime' }),
+  format.printf(customFormatter)
 )
 
 const Logger = winston.createLogger({
-  level,
-  levels,
-  defaultMeta,
-  exitOnError: false,
-  transports,
+  ...DEFAULT_CONFIG,
+  defaultMeta: { ...DEFAULT_META, type: 'CODE_FLOW_LOG' },
   format: formats
 })
 

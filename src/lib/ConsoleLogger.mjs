@@ -1,10 +1,8 @@
 import winston, { format } from 'winston'
 import colorize from '../colorize.mjs'
-import { LEVEL_COLOR_MAP } from './CONSTANTS.mjs'
+import { DEFAULT_CONFIG, LEVEL_COLOR_MAP } from './WinstonConfig.mjs'
 
-const { printf } = format
-
-const testFormatter = (logObj = {}) => {
+const customFormatter = (logObj = {}) => {
   let message = logObj.message
   const splat = logObj[Symbol.for('splat')]
 
@@ -28,29 +26,9 @@ const testFormatter = (logObj = {}) => {
   return colorFunc(message)
 }
 
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  debug: 3,
-  trace: 4
-}
-
-const level = 'trace'
-
-const transports = [
-  new winston.transports.Console()
-]
-
-const formats = printf(testFormatter)
-
 const Logger = winston.createLogger({
-  level,
-  levels,
-  // defaultMeta,
-  exitOnError: false,
-  transports,
-  format: formats
+  ...DEFAULT_CONFIG,
+  format: format.printf(customFormatter)
 })
 
 const ConsoleLogger = {
