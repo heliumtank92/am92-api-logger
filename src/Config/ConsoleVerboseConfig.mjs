@@ -32,6 +32,7 @@ function customFormatter (logObj = {}) {
     }
   }
 
-  const formattedLog = { ...logObj, type, data: JSON.stringify(data) }
+  data = JSON.stringify(data)
+  const formattedLog = { ...logObj, type, data }
   return JSON.stringify(formattedLog)
 }
