@@ -44,6 +44,7 @@ function dynamicMeta (req, res) {
     body: resBody = {}
   } = res
   const responseMessage = resBody.message || ''
+  const resHeaders = res.getHeaders()
 
   return {
     httpVersion,
@@ -57,6 +58,7 @@ function dynamicMeta (req, res) {
 
     statusCode,
     status,
+    resHeaders,
     resBody,
     responseMessage
   }
