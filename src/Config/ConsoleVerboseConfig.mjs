@@ -1,5 +1,5 @@
 import { format } from 'winston'
-import { DEFAULT_META, DEFAULT_CONFIG } from '../WinstonConfig.mjs'
+import { DEFAULT_META, DEFAULT_CONFIG } from './WinstonConfig.mjs'
 
 const formats = format.combine(
   format.timestamp({ format: 'isoDateTime' }),
@@ -32,6 +32,6 @@ function customFormatter (logObj = {}) {
     }
   }
 
-  const formattedLog = { ...logObj, type, data }
+  const formattedLog = { ...logObj, type, data: JSON.stringify(data) }
   return JSON.stringify(formattedLog)
 }

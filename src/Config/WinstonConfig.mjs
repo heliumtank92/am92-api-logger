@@ -16,9 +16,7 @@ const {
 
 const SERVICE = `${pkgName}@${pkgVersion}`
 
-const transports = [
-  new winston.transports.Console()
-]
+const transports = [new winston.transports.Console()]
 
 const DEFAULT_CONFIG = {
   levels: {
