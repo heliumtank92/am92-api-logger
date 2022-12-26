@@ -14,6 +14,7 @@ router.post('/home', function (req, res) {
     status: 'OK',
     message: 'Home Success'
   }
+  res.body = response
   res.send(response)
 })
 

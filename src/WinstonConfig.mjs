@@ -28,7 +28,7 @@ const DEFAULT_CONFIG = {
     debug: 3,
     trace: 4
   },
-  // level: 'trace',
+  level: 'trace',
   exitOnError: false,
   transports
 }
