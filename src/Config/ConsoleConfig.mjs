@@ -1,5 +1,5 @@
 import { format } from 'winston'
-import { DEFAULT_CONFIG, LEVEL_COLOR_MAP } from '../WinstonConfig.mjs'
+import { DEFAULT_CONFIG, LEVEL_COLOR_MAP } from './WinstonConfig.mjs'
 
 const ConsoleConfig = {
   ...DEFAULT_CONFIG,

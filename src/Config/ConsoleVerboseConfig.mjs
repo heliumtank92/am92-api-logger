@@ -8,15 +8,16 @@ const formats = format.combine(
 
 const ConsoleVerboseConfig = {
   ...DEFAULT_CONFIG,
-  defaultMeta: { ...DEFAULT_META, type: 'CODE_FLOW_LOG' },
+  defaultMeta: DEFAULT_META,
   format: formats
 }
 
 export default ConsoleVerboseConfig
 
 function customFormatter (logObj = {}) {
-  let data
+  const { type = 'CODE_FLOW_LOG' } = logObj
   const splat = logObj[Symbol.for('splat')]
+  let data
 
   if (!splat) {
     data = {}
@@ -31,6 +32,6 @@ function customFormatter (logObj = {}) {
     }
   }
 
-  const formattedLog = { ...logObj, data }
+  const formattedLog = { ...logObj, type, data }
   return JSON.stringify(formattedLog)
 }

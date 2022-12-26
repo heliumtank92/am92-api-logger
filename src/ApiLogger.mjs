@@ -1,14 +1,14 @@
 import winston from 'winston'
 
-import ConsoleConfig from './ConsoleConfig.mjs'
-import ConsoleVerboseConfig from './ConsoleVerboseConfig.mjs'
+import ConsoleConfig from './Config/ConsoleConfig.mjs'
+import ConsoleVerboseConfig from './Config/ConsoleVerboseConfig.mjs'
 
 const isProduction = process.env.NODE_ENV === 'production'
 const LoggerConfig = isProduction ? ConsoleVerboseConfig : ConsoleConfig
 
 const Logger = winston.createLogger(LoggerConfig)
 
-const CodeFlowLogger = {
+const ApiLogger = {
   error: Logger.error.bind(Logger),
   warn: Logger.warn.bind(Logger),
   info: Logger.info.bind(Logger),
@@ -17,4 +17,4 @@ const CodeFlowLogger = {
   log: Logger.debug.bind(Logger)
 }
 
-export default CodeFlowLogger
+export default ApiLogger
