@@ -1,7 +1,20 @@
 import { format } from 'winston'
 import { DEFAULT_META, DEFAULT_CONFIG } from '../WinstonConfig.mjs'
 
-const customFormatter = (logObj = {}) => {
+const formats = format.combine(
+  format.timestamp({ format: 'isoDateTime' }),
+  format.printf(customFormatter)
+)
+
+const ConsoleVerboseConfig = {
+  ...DEFAULT_CONFIG,
+  defaultMeta: { ...DEFAULT_META, type: 'CODE_FLOW_LOG' },
+  format: formats
+}
+
+export default ConsoleVerboseConfig
+
+function customFormatter (logObj = {}) {
   let data
   const splat = logObj[Symbol.for('splat')]
 
@@ -21,16 +34,3 @@ const customFormatter = (logObj = {}) => {
   const formattedLog = { ...logObj, data }
   return JSON.stringify(formattedLog)
 }
-
-const formats = format.combine(
-  format.timestamp({ format: 'isoDateTime' }),
-  format.printf(customFormatter)
-)
-
-const ConsoleVerboseConfig = {
-  ...DEFAULT_CONFIG,
-  defaultMeta: { ...DEFAULT_META, type: 'CODE_FLOW_LOG' },
-  format: formats
-}
-
-export default ConsoleVerboseConfig

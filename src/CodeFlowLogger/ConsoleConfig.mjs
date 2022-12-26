@@ -1,7 +1,14 @@
 import { format } from 'winston'
 import { DEFAULT_CONFIG, LEVEL_COLOR_MAP } from '../WinstonConfig.mjs'
 
-const customFormatter = (logObj = {}) => {
+const ConsoleConfig = {
+  ...DEFAULT_CONFIG,
+  format: format.printf(customFormatter)
+}
+
+export default ConsoleConfig
+
+function customFormatter (logObj = {}) {
   let message = logObj.message
   const splat = logObj[Symbol.for('splat')]
   const colorFunc = LEVEL_COLOR_MAP[logObj.level]
@@ -26,10 +33,3 @@ const customFormatter = (logObj = {}) => {
 
   return colorFunc(message)
 }
-
-const ConsoleConfig = {
-  ...DEFAULT_CONFIG,
-  format: format.printf(customFormatter)
-}
-
-export default ConsoleConfig
