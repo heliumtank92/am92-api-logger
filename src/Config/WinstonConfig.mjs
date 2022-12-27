@@ -4,6 +4,7 @@ import chalk from 'chalk'
 const LEVEL_COLOR_MAP = {
   error: chalk.redBright,
   warn: chalk.yellowBright,
+  success: chalk.greenBright,
   info: chalk.blueBright,
   debug: chalk.whiteBright,
   trace: chalk.blackBright
@@ -22,9 +23,10 @@ const DEFAULT_CONFIG = {
   levels: {
     error: 0,
     warn: 1,
-    info: 2,
-    debug: 3,
-    trace: 4
+    success: 2,
+    info: 3,
+    debug: 4,
+    trace: 5
   },
   level: 'trace',
   exitOnError: false,
