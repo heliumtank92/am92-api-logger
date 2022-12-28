@@ -1,3 +1,5 @@
+const MAX_STRING_LENGTH = 50000
+
 export {
   dataSanitizer,
   httpSanitizer
@@ -31,5 +33,7 @@ function _strigifyValue (value) {
 
   if (!value) { return '' }
   if (typeof value === 'string') { return '' }
-  return JSON.stringify(value)
+
+  const string = JSON.stringify(value)
+  return string.length <= MAX_STRING_LENGTH ? string : ''
 }

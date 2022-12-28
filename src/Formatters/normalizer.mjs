@@ -15,26 +15,9 @@ function httpNormalizer (logObj = {}) {
     message = '',
     timestamp = '',
     level = '',
-
     data,
-
-    req: {
-      httpVersion = '',
-      ipAddress = '',
-      url = '',
-      method = '',
-      headers: reqHeaders = '',
-      body: reqBody = ''
-    } = {},
-
-    res: {
-      statusCode = 200,
-      status = '',
-      headers: resHeaders = '',
-      body: resBody = '',
-      responseMessage = '',
-      responseTime = 1
-    } = {}
+    req,
+    res
   } = logObj
 
   logObj = {
@@ -43,24 +26,34 @@ function httpNormalizer (logObj = {}) {
     timestamp,
     level,
 
-    data: _toJSON(data),
+    data: _toJSON(data)
+  }
 
-    req: {
-      httpVersion,
-      ipAddress,
-      url,
-      method,
-      headers: _toJSON(reqHeaders),
-      body: _toJSON(reqBody)
-    },
+  if (req) {
+    logObj = {
+      ...logObj,
+      req: {
+        httpVersion: req.httpVersion,
+        ipAddress: req.ipAddress,
+        url: req.url,
+        method: req.method,
+        headers: _toJSON(req.headers),
+        body: _toJSON(req.body)
+      }
+    }
+  }
 
-    res: {
-      statusCode,
-      status,
-      headers: _toJSON(resHeaders),
-      body: _toJSON(resBody),
-      responseMessage,
-      responseTime
+  if (res) {
+    logObj = {
+      ...logObj,
+      res: {
+        statusCode: res.statusCode,
+        status: res.status,
+        headers: _toJSON(res.headers),
+        body: _toJSON(res.body),
+        responseMessage: res.responseMessage,
+        responseTime: res.responseTime
+      }
     }
   }
 
