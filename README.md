@@ -48,7 +48,7 @@ $ npm install --save @am92/api-logger
 
 ## Resources
 * [Winston](https://www.npmjs.com/package/winston)
-* [Express Winston](https://www.npmjs.com/package/express-winston)
+* [Chalk](https://www.npmjs.com/package/chalk)
 
 <br />
 

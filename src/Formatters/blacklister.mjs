@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 
 const isProduction = process.env.NODE_ENV === 'production'
-const disableBlacklist = process.env.DEBUG === '*' || process.env.DEBUG.includes('apiLogger:*')
+const disableBlacklist = process.env.DEBUG === '*' || process.env.DEBUG?.includes('apiLogger:*')
 
 export default function blacklister (logObject = {}) {
   if (!isProduction || disableBlacklist) { return logObject }

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Logger for Node Backend Applications",
   "type": "module",
-  "main": "src/index.mjs",
+  "main": "src/logger.mjs",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "exports": {
-    ".": "./src/index.mjs"
+    ".": "./src/logger.mjs"
   },
   "dependencies": {
     "chalk": "^5.2.0",
@@ -32,9 +32,9 @@
   },
   "keywords": [
     "logger",
-    "requet response logger",
+    "request response logger",
+    "http logger",
     "api logger",
-    "winston",
-    "winston elasticsearch"
+    "winston"
   ]
 }
