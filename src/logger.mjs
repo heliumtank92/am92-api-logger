@@ -15,6 +15,7 @@ function _createLogger (config) {
   const logger = {
     error: Logger.error.bind(Logger),
     warn: Logger.warn.bind(Logger),
+    success: Logger.success.bind(Logger),
     info: Logger.info.bind(Logger),
     debug: Logger.debug.bind(Logger),
     trace: Logger.trace.bind(Logger),
