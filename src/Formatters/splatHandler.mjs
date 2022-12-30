@@ -48,7 +48,7 @@ function _splatToData (logObj) {
     if (typeof splatData === 'object' && !(splatData instanceof Array) && splatData !== null) {
       data = splatData
     } else {
-      data = { ...splatData }
+      data = { data: splatData }
     }
   }
 
