@@ -6,20 +6,20 @@ const LEVEL_COLOR_MAP = {
   warn: chalk.yellowBright,
   success: chalk.greenBright,
   info: chalk.blueBright,
-  debug: chalk.whiteBright,
-  trace: chalk.blackBright
+  debug: chalk.whiteBright
 }
 
 const {
   npm_package_name: pkgName = '',
   npm_package_version: pkgVersion = ''
 } = process.env
+const service = `${pkgName}@${pkgVersion}`
 
-const SERVICE = `${pkgName}@${pkgVersion}`
-
+const defaultMeta = { service }
 const transports = [new winston.transports.Console()]
 
 const DEFAULT_CONFIG = {
+  defaultMeta,
   levels: {
     error: 0,
     warn: 1,
@@ -33,10 +33,7 @@ const DEFAULT_CONFIG = {
   transports
 }
 
-const DEFAULT_META = { service: SERVICE }
-
 export {
   LEVEL_COLOR_MAP,
-  DEFAULT_META,
   DEFAULT_CONFIG
 }

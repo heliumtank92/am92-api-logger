@@ -12,6 +12,7 @@ function dataNormalizer (logObj = {}) {
 function httpNormalizer (logObj = {}) {
   const {
     type = '',
+    service = '',
     message = '',
     timestamp = '',
     level = '',
@@ -22,10 +23,10 @@ function httpNormalizer (logObj = {}) {
 
   logObj = {
     type,
+    service,
     message,
     timestamp,
     level,
-
     data: _toJSON(data)
   }
 
