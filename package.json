@@ -1,0 +1,40 @@
+{
+  "name": "@am92/api-logger",
+  "version": "1.0.3",
+  "description": "Logger for Node Backend Applications",
+  "type": "module",
+  "main": "src/logger.mjs",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "git@github.com:heliumtank92/am92-api-logger.git",
+  "homepage": "https://github.com/heliumtank92/am92-api-logger#readme",
+  "contributors": [
+    {
+      "name": "Ankit Gandhi",
+      "email": "ankitgandhi452@gmail.com",
+      "url": "https://github.com/ankitgandhi452"
+    },
+    {
+      "name": "Mehul Agarwal",
+      "email": "agarwalmehul92@gmail.com",
+      "url": "https://github.com/agarwalmehul"
+    }
+  ],
+  "license": "MIT",
+  "exports": {
+    ".": "./src/logger.mjs"
+  },
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "winston": "^3.8.2"
+  },
+  "keywords": [
+    "logger",
+    "request response logger",
+    "http logger",
+    "api logger",
+    "winston"
+  ]
+}
