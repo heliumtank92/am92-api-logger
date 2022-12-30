@@ -1,10 +1,8 @@
 import crypto from 'crypto'
-
-const isProduction = process.env.NODE_ENV === 'production'
-const disableBlacklist = process.env.DEBUG === '*' || process.env.DEBUG?.includes('apiLogger:*')
+import DEBUG from '../DEBUG.mjs'
 
 export default function blacklister (logObject = {}) {
-  if (!isProduction || disableBlacklist) { return logObject }
+  if (DEBUG.disableBlacklist) { return logObject }
 
   const flatLogObj = _flattenObj(logObject)
 
