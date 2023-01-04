@@ -96,7 +96,7 @@ describe('Test Prod Logs', () => {
     logSpy.mockRestore()
   })
 
-  testIf('true')('Test Splat Object in production mode with blacklist', async () => {
+  testIf('false')('Test Splat Object in production mode with blacklist', async () => {
     process.env.NODE_ENV = 'production'
     global.API_LOGGER_BLACKLIST_KEYS = ['panNumber']
     global.API_LOGGER_BLACKLIST_MASTER_KEY = '556A586E3272357538782F413F442847'
