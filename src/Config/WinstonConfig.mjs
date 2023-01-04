@@ -6,7 +6,7 @@ const LEVEL_COLOR_MAP = {
   warn: chalk.yellowBright,
   success: chalk.greenBright,
   info: chalk.blueBright,
-  debug: chalk.whiteBright
+  trace: chalk.whiteBright
 }
 
 const {
