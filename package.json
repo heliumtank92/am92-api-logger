@@ -1,6 +1,6 @@
 {
   "name": "@am92/api-logger",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Logger for Node Backend Applications",
   "type": "module",
   "main": "src/logger.mjs",
@@ -8,7 +8,7 @@
   "scripts": {
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
     "preversion": "pnpm test",
-    "version": "pnpm run build && git add -A dist",
+    "version": "echo 'Versioning'",
     "postversion": "git push && git push --tags"
   },
   "repository": "git@github.com:heliumtank92/am92-api-logger.git",
