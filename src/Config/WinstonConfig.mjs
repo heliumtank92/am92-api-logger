@@ -13,9 +13,9 @@ const {
   npm_package_name: pkgName = '',
   npm_package_version: pkgVersion = ''
 } = process.env
-const service = `${pkgName}@${pkgVersion}`
+const SERVICE = `${pkgName}@${pkgVersion}`
 
-const defaultMeta = { service }
+const defaultMeta = { service: SERVICE }
 const transports = [new winston.transports.Console()]
 
 const DEFAULT_CONFIG = {
@@ -35,5 +35,6 @@ const DEFAULT_CONFIG = {
 
 export {
   LEVEL_COLOR_MAP,
-  DEFAULT_CONFIG
+  DEFAULT_CONFIG,
+  SERVICE
 }

@@ -5,7 +5,7 @@ const config = {
   customInspect: true,
   showProxy: false,
   maxArrayLength: 100,
-  maxStringLength: 10000,
+  maxStringLength: Infinity,
   breakLength: 80,
   compact: false,
   sorted: false,
