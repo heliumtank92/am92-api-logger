@@ -1,39 +1,65 @@
+import { inspect } from 'util'
+import INSPECT_CONFIG_MAP from '../Config/INSPECT_CONFIG_MAP.mjs'
+
 const MAX_STRING_LENGTH = 50000
 
+const isProduction = process.env.NODE_ENV === 'production'
 export {
   dataSanitizer,
   httpSanitizer
 }
 
-const isProduction = process.env.NODE_ENV === 'production'
-
 function dataSanitizer (logObj = {}) {
-  logObj.data = _strigifyValue(logObj.data)
+  logObj.message = _sanitizeMessage(logObj)
+  logObj.data = _sanitizeData(logObj)
   return logObj
 }
 
 function httpSanitizer (logObj = {}) {
-  logObj.data = _strigifyValue(logObj.data)
+  const { req, res } = logObj
+  logObj.message = _sanitizeMessage(logObj)
 
-  if (logObj.req) {
-    logObj.req.headers = _strigifyValue(logObj.req.headers)
-    logObj.req.body = _strigifyValue(logObj.req.body)
+  if (req) {
+    logObj.req.headers = _sanitizeHttpObject(req.headers)
+    logObj.req.body = _sanitizeHttpObject(req.body)
   }
 
-  if (logObj.res) {
-    logObj.res.headers = _strigifyValue(logObj.res.headers)
-    logObj.res.body = _strigifyValue(logObj.res.body)
+  if (res) {
+    logObj.res.headers = _sanitizeHttpObject(res.headers)
+    logObj.res.body = _sanitizeHttpObject(res.body)
   }
 
   return logObj
 }
 
-function _strigifyValue (value) {
-  if (!isProduction) { return value }
+function _sanitizeMessage (logObj) {
+  const { level, message } = logObj
+  if (typeof message === 'string') { return message }
+  if (isProduction) { return JSON.stringify(message) }
+  return inspect(message, INSPECT_CONFIG_MAP[level])
+}
 
-  if (!value) { return '' }
-  if (typeof value === 'string') { return '' }
+function _sanitizeData (logObj) {
+  const { level, data = [] } = logObj
+  if (isProduction) { return JSON.stringify(data) }
 
-  const string = JSON.stringify(value)
-  return string.length <= MAX_STRING_LENGTH ? string : ''
+  let dataString = ''
+  const inspectConfig = INSPECT_CONFIG_MAP[level]
+  data.forEach(d => {
+    if (typeof d === 'string') {
+      dataString += ` ${d}`
+      return
+    }
+    dataString += ` ${inspect(d, inspectConfig)}`
+  })
+
+  return dataString
+}
+
+function _sanitizeHttpObject (data) {
+  if (isProduction) {
+    const string = JSON.stringify(data)
+    return string.length <= MAX_STRING_LENGTH ? string : ''
+  }
+  return data
 }

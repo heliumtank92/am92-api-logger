@@ -5,7 +5,8 @@ const isProduction = process.env.NODE_ENV === 'production'
 export default printer
 
 function printer (logObj = {}) {
-  const colorFunc = LEVEL_COLOR_MAP[logObj.level]
-  const logString = isProduction ? JSON.stringify(logObj) : logObj.message
+  const { level, message, data = '' } = logObj
+  const colorFunc = LEVEL_COLOR_MAP[level]
+  const logString = isProduction ? JSON.stringify(logObj) : `${message}${data}`
   return (colorFunc && colorFunc(logString)) || logString
 }

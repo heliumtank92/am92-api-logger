@@ -1,6 +1,5 @@
 import { format } from 'winston'
 
-import splatHandler from '../Formatters/splatHandler.mjs'
 import { dataNormalizer } from '../Formatters/normalizer.mjs'
 import blacklister from '../Formatters/blacklister.mjs'
 import { dataSanitizer } from '../Formatters/sanitizer.mjs'
@@ -19,7 +18,6 @@ const LoggerConfig = {
 export default LoggerConfig
 
 function logFormatter (logObj = {}) {
-  logObj = splatHandler(logObj)
   logObj = dataNormalizer(logObj)
   logObj = blacklister(logObj)
   logObj = dataSanitizer(logObj)
