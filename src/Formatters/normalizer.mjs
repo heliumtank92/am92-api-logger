@@ -1,4 +1,5 @@
 import { inspect } from 'util'
+import utils from './utils.mjs'
 
 const NORMALIZER_MAP = new Map([
   ['httpInfo', httpNormalizer],
@@ -93,7 +94,7 @@ function _normaliseMessage (logobj) {
   const { message = '' } = logobj
   if (message.stack) { return message.stack }
   if (typeof message === 'function') { return inspect(message) }
-  return JSON.parse(JSON.stringify(message))
+  return JSON.parse(JSON.stringify(message, utils.serializeReplacer), utils.deserializeReviver)
 }
 
 function _normaliseSplat (logobj) {
@@ -104,7 +105,7 @@ function _normaliseSplat (logobj) {
     if (stack) { return stack }
     if (splat === undefined) { return '' }
     if (typeof splat === 'function') { return inspect(splat) }
-    return JSON.parse(JSON.stringify(splat))
+    return JSON.parse(JSON.stringify(splat, utils.serializeReplacer), utils.deserializeReviver)
   })
 
   if (stack) {
@@ -122,7 +123,7 @@ function _normaliseHttpObject (data = '') {
     }
   }
 
-  const parseObj = JSON.parse(JSON.stringify(data))
+  const parseObj = JSON.parse(JSON.stringify(data, utils.serializeReplacer), utils.deserializeReviver)
   if (parseObj?.constructor.name !== 'Object') { return {} }
   return parseObj
 }
