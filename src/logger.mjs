@@ -1,26 +1,33 @@
 import winston from 'winston'
-import HttpLoggerConfig from './Config/HttpLoggerConfig.mjs'
 import LoggerConfig from './Config/LoggerConfig.mjs'
+import { SERVICE } from './Config/WinstonConfig.mjs'
+import DEBUG from './DEBUG.mjs'
 
-const logger = _createLogger(LoggerConfig)
-const httpLogger = _createLogger(HttpLoggerConfig)
-
-export {
-  logger as default,
-  httpLogger
+const Logger = winston.createLogger(LoggerConfig)
+const logger = {
+  fatal: Logger.fatal.bind(Logger),
+  error: Logger.error.bind(Logger),
+  success: Logger.success.bind(Logger),
+  httpError: Logger.httpError.bind(Logger),
+  httpSuccess: Logger.httpSuccess.bind(Logger),
+  httpInfo: Logger.httpInfo.bind(Logger),
+  warn: Logger.warn.bind(Logger),
+  info: Logger.info.bind(Logger),
+  debug: Logger.debug.bind(Logger),
+  trace: Logger.trace.bind(Logger),
+  log: Logger.debug.bind(Logger)
 }
 
-function _createLogger (config) {
-  const Logger = winston.createLogger(config)
-  const logger = {
-    error: Logger.error.bind(Logger),
-    warn: Logger.warn.bind(Logger),
-    success: Logger.success.bind(Logger),
-    info: Logger.info.bind(Logger),
-    debug: Logger.debug.bind(Logger),
-    trace: Logger.trace.bind(Logger),
-    log: Logger.debug.bind(Logger)
-  }
+export default logger
 
-  return logger
+if (DEBUG.disableBlacklist) {
+  logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as DEBUG value is set in environment`)
+}
+
+if (!global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX) {
+  logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as API_LOGGER_BLACKLIST_MASTER_KEY_HEX is not set in global`)
+}
+
+if (!global.API_LOGGER_BLACKLIST_KEYS || !global.API_LOGGER_BLACKLIST_KEYS.length) {
+  logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as API_LOGGER_BLACKLIST_KEYS are not set in global`)
 }

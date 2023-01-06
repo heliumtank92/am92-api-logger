@@ -2,65 +2,48 @@ import crypto from 'crypto'
 import DEBUG from '../DEBUG.mjs'
 
 export default function blacklister (logObject = {}) {
-  if (DEBUG.disableBlacklist) { return logObject }
+  if (
+    DEBUG.disableBlacklist ||
+    !global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX ||
+    !global.API_LOGGER_BLACKLIST_KEYS ||
+    !global.API_LOGGER_BLACKLIST_KEYS.length
+  ) { return logObject }
 
-  const flatLogObj = _flattenObj(logObject)
-
-  Object.keys(flatLogObj).forEach(key => {
-    const value = flatLogObj[key]
-    flatLogObj[key] = _blacklistKey(key, value)
-  })
-
-  logObject = _unflattenObj(flatLogObj)
-  return logObject
+  const blacklistLogObj = _blacklist(logObject)
+  return blacklistLogObj
 }
 
-function _flattenObj (obj, parent, flatObj = {}) {
-  for (const key in obj) {
-    const propName = parent ? `${parent}.${key}` : key
-    if (typeof obj[key] === 'object') {
-      _flattenObj(obj[key], propName, flatObj)
-    } else {
-      flatObj[propName] = obj[key]
+function _blacklist (object = {}) {
+  const BLACKLIST_KEYS = global.API_LOGGER_BLACKLIST_KEYS
+  const iterable = object instanceof Array ? object : (object instanceof Object && object) ? object : {}
+
+  for (const key in iterable) {
+    const value = iterable[key]
+
+    if (BLACKLIST_KEYS.includes(key)) {
+      object[key] = _blacklistValue(value)
+      continue
     }
-  }
-  return flatObj
-}
 
-function _unflattenObj (data) {
-  const obj = {}
-
-  for (const flatKey in data) {
-    const flatKeys = flatKey.split('.')
-    flatKeys.reduce(function (acc, key, index) {
-      return acc[key] || (acc[key] = isNaN(Number(flatKeys[index + 1])) ? (flatKeys.length - 1 === index ? data[flatKey] : {}) : [])
-    }, obj)
-  }
-
-  return obj
-}
-
-function _blacklistKey (key, value) {
-  const BLACKLIST_KEYS = global.API_LOGGER_BLACKLIST_KEYS || []
-
-  for (const blacklistKey of BLACKLIST_KEYS) {
-    const regex = new RegExp(`${blacklistKey}([.\\d]{2,})?$`, 'g')
-    if (regex.test(key)) {
-      return _encrypt(value)
+    if (value !== null && (value instanceof Array || value instanceof Object)) {
+      object[key] = _blacklist(value)
     }
+
+    object[key] = value
+    continue
   }
 
-  return value
+  return object
 }
 
-function _encrypt (plainText = '') {
-  const MASTER_KEY = global.API_LOGGER_BLACKLIST_MASTER_KEY
-  if (!MASTER_KEY || !plainText) { return plainText }
+function _blacklistValue (plainText = '') {
+  const MASTER_KEY_HEX = global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX
+  if (!plainText) { return plainText }
 
   const typeofPlaintext = typeof plainText
   if (typeofPlaintext !== 'string' && typeofPlaintext !== 'number') { return plainText }
 
-  const keyBuffer = Buffer.from(MASTER_KEY, 'hex')
+  const keyBuffer = Buffer.from(MASTER_KEY_HEX, 'hex')
   const ivBuffer = Buffer.from('00000000000000000000000000000000', 'hex')
 
   const encryptor = crypto.createCipheriv('aes-128-cbc', keyBuffer, ivBuffer)

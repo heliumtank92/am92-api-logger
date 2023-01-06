@@ -2,12 +2,27 @@ import { inspect } from 'util'
 import INSPECT_CONFIG_MAP from '../Config/INSPECT_CONFIG_MAP.mjs'
 
 const MAX_STRING_LENGTH = 50000
-
 const isProduction = process.env.NODE_ENV === 'production'
-export {
-  dataSanitizer,
-  httpSanitizer
+
+const SANITIZER_MAP = new Map([
+  ['httpInfo', httpSanitizer],
+  ['httpSuccess', httpSanitizer],
+  ['httpError', httpSanitizer],
+  ['debug', dataSanitizer],
+  ['info', dataSanitizer],
+  ['success', dataSanitizer],
+  ['fatal', dataSanitizer],
+  ['error', dataSanitizer],
+  ['warn', dataSanitizer],
+  ['trace', dataSanitizer]
+])
+
+function sanitizer (logObj = {}) {
+  const { level } = logObj
+  return SANITIZER_MAP.get(level)(logObj)
 }
+
+export default sanitizer
 
 function dataSanitizer (logObj = {}) {
   logObj.message = _sanitizeMessage(logObj)
@@ -56,7 +71,7 @@ function _sanitizeData (logObj) {
   return dataString
 }
 
-function _sanitizeHttpObject (data) {
+function _sanitizeHttpObject (data = {}) {
   if (isProduction) {
     const string = JSON.stringify(data)
     return string.length <= MAX_STRING_LENGTH ? string : ''

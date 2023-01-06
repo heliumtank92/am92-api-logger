@@ -1,9 +1,24 @@
 import { inspect } from 'util'
 
-export {
-  dataNormalizer,
-  httpNormalizer
+const NORMALIZER_MAP = new Map([
+  ['httpInfo', httpNormalizer],
+  ['httpSuccess', httpNormalizer],
+  ['httpError', httpNormalizer],
+  ['debug', dataNormalizer],
+  ['info', dataNormalizer],
+  ['success', dataNormalizer],
+  ['fatal', dataNormalizer],
+  ['error', dataNormalizer],
+  ['warn', dataNormalizer],
+  ['trace', dataNormalizer]
+])
+
+function normalizer (logObj = {}) {
+  const { level } = logObj
+  return NORMALIZER_MAP.get(level)(logObj)
 }
+
+export default normalizer
 
 function dataNormalizer (logobj = {}) {
   const {
@@ -47,10 +62,10 @@ function httpNormalizer (logobj = {}) {
     logobj = {
       ...logobj,
       req: {
-        httpVersion: req.httpVersion,
-        ipAddress: req.ipAddress,
-        url: req.url,
-        method: req.method,
+        httpVersion: req.httpVersion || '',
+        ipAddress: req.ipAddress || '',
+        url: req.url || '',
+        method: req.method || '',
         headers: _normaliseHttpObject(req.headers),
         body: _normaliseHttpObject(req.body)
       }
@@ -61,12 +76,12 @@ function httpNormalizer (logobj = {}) {
     logobj = {
       ...logobj,
       res: {
-        statusCode: res.statusCode,
-        status: res.status,
+        statusCode: res.statusCode || 0,
+        status: res.status || '',
         headers: _normaliseHttpObject(res.headers),
         body: _normaliseHttpObject(res.body),
-        responseMessage: res.responseMessage,
-        responseTime: res.responseTime
+        responseMessage: res.responseMessage || '',
+        responseTime: res.responseTime || -1
       }
     }
   }
@@ -98,7 +113,7 @@ function _normaliseSplat (logobj) {
   return data
 }
 
-function _normaliseHttpObject (data) {
+function _normaliseHttpObject (data = '') {
   if (typeof data === 'string') {
     try {
       return JSON.parse(data)

@@ -6,7 +6,8 @@ const debugFeatures = new RegExp(`${DEBUG_ID}:([A-Za-z0-9,]*);?`).exec(debug)
 const debugFeaturesList = (debugFeatures && debugFeatures[1]) || []
 
 const DEBUG = {
-  disableBlacklist: false
+  disableBlacklist: false,
+  enableDebug: false
 }
 
 const DEBUG_FEATURES = Object.keys(DEBUG)
