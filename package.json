@@ -27,7 +27,8 @@
   ],
   "license": "MIT",
   "exports": {
-    ".": "./src/logger.mjs"
+    ".": "./src/logger.mjs",
+    "./polyfillConsole": "./src/polyfillConsole.js"
   },
   "dependencies": {
     "chalk": "^5.2.0",
