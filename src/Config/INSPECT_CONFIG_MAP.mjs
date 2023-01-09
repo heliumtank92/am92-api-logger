@@ -15,10 +15,11 @@ const config = {
 
 const INSPECT_CONFIG_MAP = {
   debug: { ...config, colors: true },
+  info: config,
+  success: config,
+  fatal: config,
   error: config,
   warn: config,
-  success: config,
-  info: config,
   trace: config
 }
 

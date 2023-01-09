@@ -1,17 +1,10 @@
 import winston from 'winston'
-import chalk from 'chalk'
-
-const LEVEL_COLOR_MAP = {
-  error: chalk.redBright,
-  warn: chalk.yellowBright,
-  success: chalk.greenBright,
-  info: chalk.blueBright,
-  trace: chalk.whiteBright
-}
+import DEBUG from '../DEBUG.mjs'
 
 const {
   npm_package_name: pkgName = '',
-  npm_package_version: pkgVersion = ''
+  npm_package_version: pkgVersion = '',
+  NODE_ENV
 } = process.env
 const SERVICE = `${pkgName}@${pkgVersion}`
 
@@ -21,20 +14,23 @@ const transports = [new winston.transports.Console()]
 const DEFAULT_CONFIG = {
   defaultMeta,
   levels: {
+    fatal: 0,
     error: 0,
+    success: 0,
+    httpError: 0,
+    httpSuccess: 0,
+    httpInfo: 0,
     warn: 1,
-    success: 2,
-    info: 3,
-    debug: 4,
-    trace: 5
+    info: 2,
+    debug: 3,
+    trace: 4
   },
-  level: 'trace',
+  level: (DEBUG.enableDebug && 'trace') || (NODE_ENV === 'production' ? 'info' : 'trace'),
   exitOnError: false,
   transports
 }
 
 export {
-  LEVEL_COLOR_MAP,
   DEFAULT_CONFIG,
   SERVICE
 }
