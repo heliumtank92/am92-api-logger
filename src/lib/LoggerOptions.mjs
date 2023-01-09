@@ -1,17 +1,19 @@
-import winston from 'winston'
+import winston, { format } from 'winston'
 import DEBUG from '../DEBUG.mjs'
+import formatter from './formatter.mjs'
 
 const {
   npm_package_name: pkgName = '',
   npm_package_version: pkgVersion = '',
   NODE_ENV
 } = process.env
+
 const SERVICE = `${pkgName}@${pkgVersion}`
 
 const defaultMeta = { service: SERVICE }
 const transports = [new winston.transports.Console()]
 
-const DEFAULT_CONFIG = {
+const LoggerOptions = {
   defaultMeta,
   levels: {
     fatal: 0,
@@ -27,10 +29,13 @@ const DEFAULT_CONFIG = {
   },
   level: (DEBUG.enableDebug && 'trace') || (NODE_ENV === 'production' ? 'info' : 'trace'),
   exitOnError: false,
-  transports
+  transports,
+  format: format.combine(
+    format.timestamp({ format: 'isoDateTime' }),
+    format.printf(formatter)
+  )
 }
 
-export {
-  DEFAULT_CONFIG,
-  SERVICE
-}
+export default LoggerOptions
+
+export { SERVICE }
