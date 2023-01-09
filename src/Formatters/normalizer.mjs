@@ -101,9 +101,9 @@ function _normaliseSplat (logobj) {
   const { stack } = logobj
   const splatData = logobj[Symbol.for('splat')] || []
   let data = splatData.map(splat => {
+    if (splat === undefined) { return undefined }
     const { stack } = splat
     if (stack) { return stack }
-    if (splat === undefined) { return '' }
     if (typeof splat === 'function') { return inspect(splat) }
     return JSON.parse(JSON.stringify(splat, utils.serializeReplacer), utils.deserializeReviver)
   })
