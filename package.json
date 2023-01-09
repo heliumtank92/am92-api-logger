@@ -1,6 +1,6 @@
 {
   "name": "@am92/api-logger",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Logger for Node Backend Applications",
   "type": "module",
   "main": "src/logger.mjs",
