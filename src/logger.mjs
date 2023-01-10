@@ -1,9 +1,9 @@
 import winston from 'winston'
-import LoggerOptions, { SERVICE } from './lib/LoggerOptions.mjs'
+import LoggerOptions from './lib/LoggerOptions.mjs'
 import DEBUG from './DEBUG.mjs'
 import CONFIG from './CONFIG.mjs'
 
-const { IS_PRODUCTION } = CONFIG
+const { IS_PRODUCTION, SERVICE } = CONFIG
 
 const Logger = winston.createLogger(LoggerOptions)
 
@@ -23,8 +23,8 @@ const logger = {
 
 export default logger
 
-if (DEBUG.disableBlacklist) {
-  logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as DEBUG Value is Set in Environment`)
+if (IS_PRODUCTION && DEBUG.disableBlacklist) {
+  logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as DEBUG is Set in Environment`)
 }
 
 if (!global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX) {
@@ -35,6 +35,6 @@ if (!global.API_LOGGER_BLACKLIST_KEYS || !global.API_LOGGER_BLACKLIST_KEYS.lengt
   logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as API_LOGGER_BLACKLIST_KEYS are Not Set in Global`)
 }
 
-if (!DEBUG.enableDebug && IS_PRODUCTION) {
+if (IS_PRODUCTION && !DEBUG.enableDebug) {
   logger.warn(`[${SERVICE} ApiLogger] Log Levels Debug, Trace & Log are Suppressed`)
 }

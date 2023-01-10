@@ -1,6 +1,6 @@
 import { inspect } from 'util'
 import CONFIG from '../CONFIG.mjs'
-import getSerializer from './getSerializer.mjs'
+import serializer from './serializer.mjs'
 import LEVEL_CONFIG from './LEVEL_CONFIG.mjs'
 
 const { IS_PRODUCTION } = CONFIG
@@ -18,24 +18,21 @@ const FORMATTER_MAP = new Map([
   ['trace', dataFormatter]
 ])
 
-function formatter (logObj = {}) {
+export default function formatter (logObj = {}) {
   const { level } = logObj
-  const formatter = FORMATTER_MAP.get(level)
+  const logFormatter = FORMATTER_MAP.get(level)
   const { inspectConfig, colorFunc } = LEVEL_CONFIG.get(logObj.level) || {}
-  const serializer = getSerializer(inspectConfig)
 
-  const logString = formatter(logObj, serializer, inspectConfig)
+  const logString = logFormatter(logObj, inspectConfig)
   return (colorFunc && colorFunc(logString)) || logString
 }
 
-export default formatter
-
-function dataFormatter (logObj = {}, replacer, inspectConfig) {
+function dataFormatter (logObj = {}, inspectConfig) {
   // Splat Handling
-  const _splat = _formatSplat(logObj, replacer, inspectConfig)
+  const _splat = _formatSplat(logObj, inspectConfig)
 
   // Message Handling
-  const msg = _formatMessage(logObj.message, _splat, replacer, inspectConfig)
+  const msg = _formatMessage(logObj.message, _splat, inspectConfig)
 
   if (!IS_PRODUCTION) { return msg }
 
@@ -58,8 +55,8 @@ function dataFormatter (logObj = {}, replacer, inspectConfig) {
   return JSON.stringify(normalizedLogObj)
 }
 
-function httpFormatter (logObj = {}, replacer, inspectConfig) {
-  const msg = JSON.stringify(logObj.message, replacer)
+function httpFormatter (logObj = {}) {
+  const msg = JSON.stringify(logObj.message, serializer)
 
   if (!IS_PRODUCTION) { return msg }
 
@@ -88,8 +85,8 @@ function httpFormatter (logObj = {}, replacer, inspectConfig) {
         ipAddress: req.ipAddress || '',
         url: req.url || '',
         method: req.method || '',
-        headers: JSON.stringify(req.headers, replacer),
-        body: JSON.stringify(req.body, replacer)
+        headers: JSON.stringify(req.headers, serializer),
+        body: JSON.stringify(req.body, serializer)
       }
     }
   }
@@ -100,8 +97,8 @@ function httpFormatter (logObj = {}, replacer, inspectConfig) {
       res: {
         statusCode: res.statusCode || 0,
         status: res.status || '',
-        headers: JSON.stringify(res.headers, replacer),
-        body: JSON.stringify(res.body, replacer),
+        headers: JSON.stringify(res.headers, serializer),
+        body: JSON.stringify(res.body, serializer),
         responseMessage: res.responseMessage || '',
         responseTime: res.responseTime || -1
       }
@@ -111,24 +108,24 @@ function httpFormatter (logObj = {}, replacer, inspectConfig) {
   return JSON.stringify(logObj)
 }
 
-function _formatSplat (logobj, replacer, inspectConfig) {
+function _formatSplat (logobj, inspectConfig) {
   const { stack } = logobj
-  let splatData = logobj[Symbol.for('splat')] || []
-  if (stack) {
-    splatData = [stack, ...splatData]
+  const splatData = logobj[Symbol.for('splat')] || []
+  if (stack && !splatData.length) {
+    splatData.unshift(stack)
   }
 
   return IS_PRODUCTION
-    ? JSON.stringify(splatData, replacer)
+    ? JSON.stringify(splatData, serializer)
     : splatData.map(splat => {
       return inspect(splat, inspectConfig)
     })
 }
 
-function _formatMessage (message, _splat, replacer, inspectConfig) {
+function _formatMessage (message, _splat, inspectConfig) {
   let msg = message
   if (typeof msg !== 'string') {
-    msg = IS_PRODUCTION ? JSON.stringify(message, replacer) : inspect(message, inspectConfig)
+    msg = IS_PRODUCTION ? JSON.stringify(message, serializer) : inspect(message, inspectConfig)
   }
 
   // Append Splat in dev mode
