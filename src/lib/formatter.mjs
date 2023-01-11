@@ -56,11 +56,14 @@ function dataFormatter (logObj = {}, inspectConfig) {
 }
 
 function httpFormatter (logObj = {}) {
-  const msg = JSON.stringify(logObj.message, serializer)
+  if (typeof logObj.message !== 'string') {
+    logObj.message = JSON.stringify(logObj.message, serializer)
+  }
 
-  if (!IS_PRODUCTION) { return msg }
+  if (!IS_PRODUCTION) { return logObj.message }
 
   const {
+    message = '',
     type = '',
     service = '',
     timestamp = '',
@@ -72,7 +75,7 @@ function httpFormatter (logObj = {}) {
   logObj = {
     type,
     service,
-    message: msg,
+    message,
     timestamp,
     level
   }

@@ -3,7 +3,9 @@ import { inspect } from 'util'
 import DEBUG from '../DEBUG.mjs'
 
 const BLACKLIST_KEYS = global.API_LOGGER_BLACKLIST_KEYS
-const MASTER_KEY_HEX = global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX
+const MASTER_KEY_HEX = global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX || ''
+const KEY_BUFFER = Buffer.from(MASTER_KEY_HEX, 'hex')
+const IV_BUFFER = Buffer.from('00000000000000000000000000000000', 'hex')
 
 const shouldBlacklist = (
   !DEBUG.disableBlacklist &&
@@ -43,12 +45,16 @@ function _blacklistValue (plainText = '') {
     return plainText
   }
 
-  const keyBuffer = Buffer.from(MASTER_KEY_HEX, 'hex')
-  const ivBuffer = Buffer.from('00000000000000000000000000000000', 'hex')
+  if (plainText instanceof Array) {
+    return plainText.map(_blacklist)
+  } else {
+    return _blacklist(plainText)
+  }
+}
 
-  const encryptor = crypto.createCipheriv('aes-128-cbc', keyBuffer, ivBuffer)
+function _blacklist (plainText) {
+  const encryptor = crypto.createCipheriv('aes-128-cbc', KEY_BUFFER, IV_BUFFER)
   const cipherTextBuffer = Buffer.concat([encryptor.update(`${plainText}`, 'utf8'), encryptor.final()])
-
   const cipherText = cipherTextBuffer.toString('base64')
   return cipherText
 }
