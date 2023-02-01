@@ -20,7 +20,7 @@ const LEVEL_CONFIG = new Map([
   ['httpSuccess', { inspectConfig, colorFunc: chalk.greenBright }],
   ['httpError', { inspectConfig, colorFunc: chalk.redBright }],
   ['debug', { inspectConfig: { ...inspectConfig, colors: true } }],
-  ['info', { inspectConfig, colorFunc: chalk.blueBright }],
+  ['info', { inspectConfig, colorFunc: chalk.cyanBright }],
   ['success', { inspectConfig, colorFunc: chalk.greenBright }],
   ['fatal', { inspectConfig, colorFunc: chalk.redBright.bold }],
   ['error', { inspectConfig, colorFunc: chalk.redBright }],
