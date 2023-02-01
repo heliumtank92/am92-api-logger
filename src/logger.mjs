@@ -1,10 +1,13 @@
 import winston from 'winston'
-import LoggerConfig from './Config/LoggerConfig.mjs'
-import { SERVICE } from './Config/WinstonConfig.mjs'
+import LoggerOptions from './lib/LoggerOptions.mjs'
 import DEBUG from './DEBUG.mjs'
+import CONSTANTS from './CONSTANTS.mjs'
+import CONFIG from './CONFIG.mjs'
 
-const isProduction = process.env.NODE_ENV === 'production'
-const Logger = winston.createLogger(LoggerConfig)
+const { IS_PRODUCTION, SERVICE } = CONFIG
+
+const Logger = winston.createLogger(LoggerOptions)
+
 const logger = {
   fatal: Logger.fatal.bind(Logger),
   error: Logger.error.bind(Logger),
@@ -21,18 +24,26 @@ const logger = {
 
 export default logger
 
-if (DEBUG.disableBlacklist) {
-  logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as DEBUG Value is Set in Environment`)
-}
+if (IS_PRODUCTION) {
+  if (DEBUG.disableBlacklist) {
+    logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as DEBUG is Set in Environment`)
+  }
 
-if (!global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX) {
-  logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as API_LOGGER_BLACKLIST_MASTER_KEY_HEX is Not Set in Global`)
-}
+  if (!CONSTANTS.MASTER_KEY_HEX) {
+    logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as API_LOGGER_BLACKLIST_MASTER_KEY_HEX is Not Set in Global`)
+  }
 
-if (!global.API_LOGGER_BLACKLIST_KEYS || !global.API_LOGGER_BLACKLIST_KEYS.length) {
-  logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as API_LOGGER_BLACKLIST_KEYS are Not Set in Global`)
-}
+  if (!CONSTANTS.BLACKLIST_KEYS || !CONSTANTS.BLACKLIST_KEYS.length) {
+    logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as API_LOGGER_BLACKLIST_KEYS are Not Set in Global`)
+  }
 
-if (!DEBUG.enableDebug && isProduction) {
-  logger.warn(`[${SERVICE} ApiLogger] Log Levels Debug, Trace & Log are Suppressed`)
+  if (CONSTANTS.MASTER_KEY_HEX && !CONSTANTS.MASTER_KEY_BUFFER) {
+    logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as Invalid API_LOGGER_BLACKLIST_MASTER_KEY_HEX provided for algorithm '${CONSTANTS.ENCRYPT_ALGO}'`)
+  }
+
+  if (!DEBUG.enableDebug) {
+    logger.warn(`[${SERVICE} ApiLogger] Log Levels Debug, Trace & Log are Suppressed`)
+  }
+} else {
+  logger.trace(`[${SERVICE} ApiLogger] Blacklisting Disabled for Non-Production Mode. Ensure API_LOGGER_BLACKLIST_MASTER_KEY_HEX & API_LOGGER_BLACKLIST_KEYS are set in Global to Enable Blacklisting in Production Mode`)
 }
