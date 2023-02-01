@@ -1,17 +1,13 @@
 import crypto from 'crypto'
 import { inspect } from 'util'
+import CONSTANTS from '../CONSTANTS.mjs'
 import DEBUG from '../DEBUG.mjs'
-
-const BLACKLIST_KEYS = global.API_LOGGER_BLACKLIST_KEYS
-const MASTER_KEY_HEX = global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX || ''
-const KEY_BUFFER = Buffer.from(MASTER_KEY_HEX, 'hex')
-const IV_BUFFER = Buffer.from('00000000000000000000000000000000', 'hex')
 
 const shouldBlacklist = (
   !DEBUG.disableBlacklist &&
-  MASTER_KEY_HEX &&
-  BLACKLIST_KEYS &&
-  BLACKLIST_KEYS.length > 0
+  CONSTANTS.MASTER_KEY_BUFFER &&
+  CONSTANTS.BLACKLIST_KEYS &&
+  CONSTANTS.BLACKLIST_KEYS.length > 0
 )
 
 export default function serializer (key, value) {
@@ -22,7 +18,7 @@ export default function serializer (key, value) {
   if (
     key &&
     shouldBlacklist &&
-    BLACKLIST_KEYS.includes(key)
+    CONSTANTS.BLACKLIST_KEYS.includes(key)
   ) {
     return _blacklistValue(value)
   }
@@ -53,7 +49,7 @@ function _blacklistValue (plainText = '') {
 }
 
 function _blacklist (plainText) {
-  const encryptor = crypto.createCipheriv('aes-128-cbc', KEY_BUFFER, IV_BUFFER)
+  const encryptor = crypto.createCipheriv(CONSTANTS.ENCRYPT_ALGO, CONSTANTS.MASTER_KEY_BUFFER, CONSTANTS.MASTER_IV_BUFFER)
   const cipherTextBuffer = Buffer.concat([encryptor.update(`${plainText}`, 'utf8'), encryptor.final()])
   const cipherText = cipherTextBuffer.toString('base64')
   return cipherText

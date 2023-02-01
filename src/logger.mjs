@@ -1,6 +1,7 @@
 import winston from 'winston'
 import LoggerOptions from './lib/LoggerOptions.mjs'
 import DEBUG from './DEBUG.mjs'
+import CONSTANTS from './CONSTANTS.mjs'
 import CONFIG from './CONFIG.mjs'
 
 const { IS_PRODUCTION, SERVICE } = CONFIG
@@ -28,12 +29,16 @@ if (IS_PRODUCTION) {
     logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as DEBUG is Set in Environment`)
   }
 
-  if (!global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX) {
+  if (!CONSTANTS.MASTER_KEY_HEX) {
     logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as API_LOGGER_BLACKLIST_MASTER_KEY_HEX is Not Set in Global`)
   }
 
-  if (!global.API_LOGGER_BLACKLIST_KEYS || !global.API_LOGGER_BLACKLIST_KEYS.length) {
+  if (!CONSTANTS.BLACKLIST_KEYS || !CONSTANTS.BLACKLIST_KEYS.length) {
     logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as API_LOGGER_BLACKLIST_KEYS are Not Set in Global`)
+  }
+
+  if (CONSTANTS.MASTER_KEY_HEX && !CONSTANTS.MASTER_KEY_BUFFER) {
+    logger.warn(`[${SERVICE} ApiLogger] Blacklisting Disabled as Invalid API_LOGGER_BLACKLIST_MASTER_KEY_HEX provided for algorithm '${CONSTANTS.ENCRYPT_ALGO}'`)
   }
 
   if (!DEBUG.enableDebug) {
