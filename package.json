@@ -3,13 +3,33 @@
   "version": "1.0.25",
   "description": "Logger for Node Backend Applications",
   "type": "module",
-  "main": "./index.mjs",
-  "module": "./index.mjs",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.mts",
+      "import": "./src/index.mjs"
+    },
+    "./polyfillConsole": {
+      "types": "./types/polyfillConsole.d.ts",
+      "import": "./src/polyfillConsole.js"
+    }
+  },
+  "types": "./types/index.d.mts",
+  "module": "./src/index.mjs",
+  "main": "./src/index.mjs",
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.6"
+  },
   "scripts": {
     "test": "echo 'Error: no test specified'",
+    "generate:types": "rm -rf types && npx -p typescript tsc",
     "preversion": "pnpm test",
     "version": "echo 'Versioning'",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "publish": "npm publish"
   },
   "repository": "git@github.com:heliumtank92/am92-api-logger.git",
   "homepage": "https://github.com/heliumtank92/am92-api-logger#readme",
@@ -25,16 +45,10 @@
       "url": "https://github.com/agarwalmehul"
     }
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT",
-  "exports": {
-    ".": "./index.mjs",
-    "./polyfillConsole": "./polyfillConsole.js"
-  },
-  "dependencies": {
-    "chalk": "^5.2.0",
-    "winston": "^3.8.2"
-  },
-  "devDependencies": {},
   "keywords": [
     "logger",
     "request response logger",
