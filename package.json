@@ -29,7 +29,7 @@
     "preversion": "pnpm test",
     "version": "echo 'Versioning'",
     "postversion": "git push && git push --tags",
-    "publish": "npm publish"
+    "publish:pkg": "npm publish"
   },
   "repository": "git@github.com:heliumtank92/am92-api-logger.git",
   "homepage": "https://github.com/heliumtank92/am92-api-logger#readme",
