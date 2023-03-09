@@ -37,8 +37,8 @@ function dataFormatter (logObj = {}, inspectConfig) {
   if (!IS_PRODUCTION) { return msg }
 
   const {
-    type = '',
     service = '',
+    type = '',
     timestamp = '',
     level = ''
   } = logObj
@@ -73,8 +73,8 @@ function httpFormatter (logObj = {}) {
   } = logObj
 
   logObj = {
-    type,
     service,
+    type,
     message,
     timestamp,
     level

@@ -33,11 +33,11 @@ function _blacklistValue (plainText = '') {
 
   const typeofPlaintext = typeof plainText
 
-  if (
-    typeofPlaintext !== 'string' &&
-    typeofPlaintext !== 'number' &&
-    (typeofPlaintext === 'object' && plainText instanceof Array && typeof plainText[0] === 'object')
-  ) {
+  if (!(
+    typeofPlaintext === 'string' ||
+    typeofPlaintext === 'number' ||
+    (typeofPlaintext === 'object' && plainText instanceof Array && typeof plainText[0] !== 'object')
+  )) {
     return plainText
   }
 
