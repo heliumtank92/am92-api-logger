@@ -1,13 +1,13 @@
-import apiLogger from './index.mjs'
+import ApiLogger from './index.mjs'
 
-console.fatal = apiLogger.fatal
-console.error = apiLogger.error
-console.success = apiLogger.success
-console.httpError = apiLogger.httpError
-console.httpSuccess = apiLogger.httpSuccess
-console.httpInfo = apiLogger.httpInfo
-console.warn = apiLogger.warn
-console.info = apiLogger.info
-console.debug = apiLogger.debug
-console.trace = apiLogger.trace
-console.log = apiLogger.log
+console.fatal = ApiLogger.fatal
+console.error = ApiLogger.error
+console.success = ApiLogger.success
+console.httpError = ApiLogger.httpError
+console.httpSuccess = ApiLogger.httpSuccess
+console.httpInfo = ApiLogger.httpInfo
+console.warn = ApiLogger.warn
+console.info = ApiLogger.info
+console.debug = ApiLogger.debug
+console.trace = ApiLogger.trace
+console.log = ApiLogger.log

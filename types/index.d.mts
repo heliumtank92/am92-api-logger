@@ -1,5 +1,5 @@
-export default apiLogger;
-declare namespace apiLogger {
+export default ApiLogger;
+declare namespace ApiLogger {
     const fatal: any;
     const error: any;
     const success: any;
