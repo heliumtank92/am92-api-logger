@@ -65,9 +65,9 @@ function httpFormatter (logObj = {}) {
   if (!IS_PRODUCTION) { return logObj.message }
 
   const {
-    message = '',
-    type = '',
     service = '',
+    type = '',
+    message = '',
     timestamp = '',
     level = '',
     req,
