@@ -18,6 +18,7 @@
   "main": "./src/index.mjs",
   "dependencies": {
     "chalk": "^5.2.0",
+    "uuid": "^9.0.0",
     "winston": "^3.8.2"
   },
   "devDependencies": {

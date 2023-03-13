@@ -1,3 +1,4 @@
+import { v4 as uuidV4 } from 'uuid/v4'
 import { inspect } from 'util'
 import CONFIG from '../CONFIG.mjs'
 import serializer from './serializer.mjs'
@@ -44,8 +45,9 @@ function dataFormatter (logObj = {}, inspectConfig) {
   } = logObj
 
   const normalizedLogObj = {
-    type,
     service,
+    type,
+    logId: uuidV4(),
     message: msg,
     timestamp,
     level,
@@ -75,6 +77,7 @@ function httpFormatter (logObj = {}) {
   logObj = {
     service,
     type,
+    logId: uuidV4(),
     message,
     timestamp,
     level
