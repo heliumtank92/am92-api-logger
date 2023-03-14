@@ -1,7 +1,8 @@
 import winston from 'winston'
 import LoggerOptions from './lib/LoggerOptions.mjs'
+import namespace from './lib/namespace.mjs'
 import DEBUG from './DEBUG.mjs'
-import CONSTANTS from './CONSTANTS.mjs'
+import CONSTANTS, { API_LOGGER_TRACKING_ID } from './CONSTANTS.mjs'
 import CONFIG from './CONFIG.mjs'
 
 const { IS_PRODUCTION, SERVICE } = CONFIG
@@ -23,6 +24,7 @@ const ApiLogger = {
 }
 
 export default ApiLogger
+export { namespace, API_LOGGER_TRACKING_ID }
 
 if (IS_PRODUCTION) {
   if (DEBUG.disableBlacklist) {

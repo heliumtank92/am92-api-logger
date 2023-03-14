@@ -1,4 +1,5 @@
 export default CONSTANTS;
+export const API_LOGGER_TRACKING_ID: "api-logger-tracking-id";
 declare namespace CONSTANTS {
     export { ENCRYPT_ALGO };
     export { BLACKLIST_KEYS };

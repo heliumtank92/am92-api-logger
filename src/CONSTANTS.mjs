@@ -18,3 +18,5 @@ const CONSTANTS = {
 }
 
 export default CONSTANTS
+
+export const API_LOGGER_TRACKING_ID = 'api-logger-tracking-id'

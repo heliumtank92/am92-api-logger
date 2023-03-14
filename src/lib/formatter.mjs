@@ -1,7 +1,10 @@
+import { nanoid } from 'nanoid'
 import { inspect } from 'util'
 import CONFIG from '../CONFIG.mjs'
 import serializer from './serializer.mjs'
 import LEVEL_CONFIG from './LEVEL_CONFIG.mjs'
+import namespace from './namespace.mjs'
+import { API_LOGGER_TRACKING_ID } from '../CONSTANTS.mjs'
 
 const { IS_PRODUCTION } = CONFIG
 
@@ -44,8 +47,10 @@ function dataFormatter (logObj = {}, inspectConfig) {
   } = logObj
 
   const normalizedLogObj = {
-    type,
     service,
+    type,
+    logId: nanoid(),
+    trackingId: _getTrackingId(),
     message: msg,
     timestamp,
     level,
@@ -63,9 +68,9 @@ function httpFormatter (logObj = {}) {
   if (!IS_PRODUCTION) { return logObj.message }
 
   const {
-    message = '',
-    type = '',
     service = '',
+    type = '',
+    message = '',
     timestamp = '',
     level = '',
     req,
@@ -75,6 +80,8 @@ function httpFormatter (logObj = {}) {
   logObj = {
     service,
     type,
+    logId: nanoid(),
+    trackingId: _getTrackingId(),
     message,
     timestamp,
     level
@@ -139,4 +146,12 @@ function _formatMessage (message, _splat, inspectConfig) {
   }
 
   return msg
+}
+
+function _getTrackingId () {
+  if (namespace && namespace.active) {
+    return namespace.get(API_LOGGER_TRACKING_ID) || ''
+  }
+
+  return ''
 }
