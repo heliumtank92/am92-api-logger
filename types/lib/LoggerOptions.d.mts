@@ -22,4 +22,4 @@ declare namespace LoggerOptions {
 }
 declare const SERVICE: string;
 declare const transports: winston.transports.ConsoleTransportInstance[];
-import winston from "winston";
+import winston from 'winston';

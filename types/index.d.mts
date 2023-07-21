@@ -12,6 +12,6 @@ declare namespace ApiLogger {
     const trace: any;
     const log: any;
 }
-import namespace from "./lib/namespace.mjs";
-import { API_LOGGER_TRACKING_ID } from "./CONSTANTS.mjs";
+import namespace from './lib/namespace.mjs';
+import { API_LOGGER_TRACKING_ID } from './CONSTANTS.mjs';
 export { namespace, API_LOGGER_TRACKING_ID };
