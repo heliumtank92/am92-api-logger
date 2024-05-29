@@ -54,13 +54,19 @@ function dataFormatter(
     return msg
   }
 
-  const { service = '', type = '', timestamp = '', level = 'debug' } = logObj
+  const {
+    service = '',
+    type = '',
+    timestamp = '',
+    level = 'debug',
+    trackingId = ''
+  } = logObj
 
   const normalizedLogObj: ApiLoggerLogObject = {
     service,
     type,
     logId: nanoid(),
-    trackingId: _getTrackingId(),
+    trackingId: trackingId || _getTrackingId(),
     message: msg,
     timestamp,
     level: level as ApiLoggerLogLevel,
@@ -85,6 +91,7 @@ function httpFormatter(logObj: ApiLoggerLogEntry): string {
     type = '',
     message = '',
     timestamp = '',
+    trackingId = '',
     level,
     req,
     res
@@ -94,7 +101,7 @@ function httpFormatter(logObj: ApiLoggerLogEntry): string {
     service,
     type,
     logId: nanoid(),
-    trackingId: _getTrackingId(),
+    trackingId: trackingId || _getTrackingId(),
     message,
     timestamp,
     level: level as ApiLoggerLogLevel
@@ -106,8 +113,8 @@ function httpFormatter(logObj: ApiLoggerLogEntry): string {
       ipAddress: req.ipAddress || '',
       url: req.url || '',
       method: req.method || '',
-      headers: JSON.stringify(req.headers, serializer),
-      body: JSON.stringify(req.body, serializer)
+      headers: req.headers ? JSON.stringify(req.headers, serializer) : '',
+      body: req.body ? JSON.stringify(req.body, serializer) : ''
     }
   }
 
@@ -115,8 +122,8 @@ function httpFormatter(logObj: ApiLoggerLogEntry): string {
     formattedLogObj.res = {
       statusCode: res.statusCode || 0,
       status: res.status || '',
-      headers: JSON.stringify(res.headers, serializer),
-      body: JSON.stringify(res.body, serializer),
+      headers: res.headers ? JSON.stringify(res.headers, serializer) : '',
+      body: res.body ? JSON.stringify(res.body, serializer) : '',
       responseMessage: res.responseMessage || '',
       responseTime: res.responseTime || -1
     }

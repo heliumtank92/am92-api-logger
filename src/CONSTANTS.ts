@@ -4,11 +4,11 @@ import { ApiLoggerConstants } from './TYPES'
 const ENCRYPT_ALGO = 'aes-256-cbc'
 
 /** @ignore */
-const BLACKLIST_KEYS = global.API_LOGGER_BLACKLIST_KEYS
+const BLACKLIST_KEYS = global.API_LOGGER_BLACKLIST_KEYS || []
 /** @ignore */
-const GLOBAL_MASTER_KEY_HEX = global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX
+const GLOBAL_MASTER_KEY_HEX = global.API_LOGGER_BLACKLIST_MASTER_KEY_HEX || ''
 /** @ignore */
-const GLOBAL_MASTER_IV_HEX = global.API_LOGGER_BLACKLIST_MASTER_IV_HEX
+const GLOBAL_MASTER_IV_HEX = global.API_LOGGER_BLACKLIST_MASTER_IV_HEX || ''
 
 /** @ignore */
 const DEFAULT_MASTER_KEY_HEX =

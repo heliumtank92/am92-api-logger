@@ -132,13 +132,21 @@ export type ApiLoggerOptions = LoggerOptions & {
 }
 
 /**
+ * Type representing the log method for the API logger.
+ *
+ * @export
+ * @typedef {ApiLoggerLogMethod}
+ */
+export type ApiLoggerLogMethod = LeveledLogMethod
+
+/**
  * Type representing the API logger with various log levels and a log method.
  *
  * @export
  * @typedef {ApiLogger}
  */
-export type ApiLogger = Record<ApiLoggerLogLevel, LeveledLogMethod> & {
-  log: LeveledLogMethod
+export type ApiLogger = Record<ApiLoggerLogLevel, ApiLoggerLogMethod> & {
+  log: ApiLoggerLogMethod
 }
 
 /**
@@ -184,15 +192,15 @@ export interface ApiLoggerLogObjectRequest {
   /**
    * HTTP version of the request.
    *
-   * @type {string}
+   * @type {?string}
    */
-  httpVersion: string
+  httpVersion?: string
   /**
    * IP address of the client making the request.
    *
-   * @type {string}
+   * @type {?string}
    */
-  ipAddress: string
+  ipAddress?: string
   /**
    * URL of the request.
    *
@@ -208,15 +216,15 @@ export interface ApiLoggerLogObjectRequest {
   /**
    * Headers of the request.
    *
-   * @type {string}
+   * @type {?(string | object)}
    */
-  headers: string
+  headers?: string | object
   /**
    * Body of the request.
    *
-   * @type {string}
+   * @type {?any}
    */
-  body: string
+  body?: any
 }
 
 /**
@@ -242,27 +250,27 @@ export interface ApiLoggerLogObjectResponse {
   /**
    * Headers of the response.
    *
-   * @type {string}
+   * @type {string | object}
    */
-  headers: string
+  headers?: string | object
   /**
    * Body of the response.
    *
-   * @type {string}
+   * @type {?any}
    */
-  body: string
+  body?: any
   /**
    * Response message.
    *
-   * @type {string}
+   * @type {?string}
    */
-  responseMessage: string
+  responseMessage?: string
   /**
    * Time taken to generate the response.
    *
-   * @type {number}
+   * @type {?number}
    */
-  responseTime: number
+  responseTime?: number
 }
 
 /**
@@ -276,51 +284,51 @@ export interface ApiLoggerLogObject {
   /**
    * Service name associated with the log.
    *
-   * @type {string}
+   * @type {?string}
    */
-  service: string
+  service?: string
   /**
    * Type of log.
    *
-   * @type {string}
+   * @type {?string}
    */
-  type: string
+  type?: string
   /**
    * Unique identifier for the log.
    *
-   * @type {string}
+   * @type {?string}
    */
-  logId: string
+  logId?: string
   /**
    * Tracking ID associated with the log.
    *
-   * @type {string}
+   * @type {?string}
    */
-  trackingId: string
+  trackingId?: string
   /**
    * Log message.
    *
-   * @type {string}
+   * @type {?string}
    */
-  message: string
+  message?: string
   /**
    * Timestamp of the log.
    *
    * @type {number}
    */
-  timestamp: number
+  timestamp?: number
   /**
    * Log level.
    *
-   * @type {ApiLoggerLogLevel}
+   * @type {?ApiLoggerLogLevel}
    */
-  level: ApiLoggerLogLevel
+  level?: ApiLoggerLogLevel
   /**
    * Additional data associated with the log.
    *
    * @type {?(string | any[])}
    */
-  data?: string | any[]
+  data?: any
   /**
    * Request object associated with the log.
    *
@@ -341,17 +349,17 @@ declare global {
    *
    * @type {string[]}
    */
-  var API_LOGGER_BLACKLIST_KEYS: string[]
+  var API_LOGGER_BLACKLIST_KEYS: string[] | undefined
   /**
    * Global variable for API logger blacklist master key in hexadecimal format.
    *
    * @type {string}
    */
-  var API_LOGGER_BLACKLIST_MASTER_KEY_HEX: string
+  var API_LOGGER_BLACKLIST_MASTER_KEY_HEX: string | undefined
   /**
    * Global variable for API logger blacklist master IV in hexadecimal format.
    *
    * @type {string}
    */
-  var API_LOGGER_BLACKLIST_MASTER_IV_HEX: string
+  var API_LOGGER_BLACKLIST_MASTER_IV_HEX: string | undefined
 }
