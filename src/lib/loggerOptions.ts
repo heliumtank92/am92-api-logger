@@ -1,13 +1,14 @@
 import winston, { format } from 'winston'
-import DEBUG from '../DEBUG.mjs'
-import formatter from './formatter.mjs'
-import CONFIG from '../CONFIG.mjs'
+import DEBUG from '../DEBUG'
+import formatter from './formatter'
+import { SERVICE, IS_PRODUCTION } from '../CONFIG'
+import { ApiLoggerOptions } from '../TYPES'
 
-const { IS_PRODUCTION, SERVICE } = CONFIG
-
+/** @ignore */
 const transports = [new winston.transports.Console()]
 
-const LoggerOptions = {
+/** @ignore */
+const loggerOptions: ApiLoggerOptions = {
   defaultMeta: { service: SERVICE },
   levels: {
     fatal: 0,
@@ -30,4 +31,4 @@ const LoggerOptions = {
   )
 }
 
-export default LoggerOptions
+export default loggerOptions
