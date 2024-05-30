@@ -6,7 +6,6 @@ import DEBUG from '../DEBUG'
 /** @ignore */
 const shouldBlacklist: boolean =
   !DEBUG.disableBlacklist &&
-  CONSTANTS.MASTER_KEY_BUFFER &&
   CONSTANTS.BLACKLIST_KEYS &&
   CONSTANTS.BLACKLIST_KEYS.length > 0
 
