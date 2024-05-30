@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid'
+import crypto from 'crypto'
 import { inspect, InspectOptions } from 'util'
 import serializer from './serializer'
 import LEVEL_CONFIG from './LEVEL_CONFIG'
@@ -65,7 +65,7 @@ function dataFormatter(
   const normalizedLogObj: ApiLoggerLogObject = {
     service,
     type,
-    logId: nanoid(),
+    logId: crypto.randomUUID(),
     trackingId: trackingId || _getTrackingId(),
     message: msg,
     timestamp,
@@ -100,7 +100,7 @@ function httpFormatter(logObj: ApiLoggerLogEntry): string {
   const formattedLogObj: ApiLoggerLogObject = {
     service,
     type,
-    logId: nanoid(),
+    logId: crypto.randomUUID(),
     trackingId: trackingId || _getTrackingId(),
     message,
     timestamp,
