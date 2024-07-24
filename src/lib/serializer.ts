@@ -68,10 +68,14 @@ function _blacklist(plainText: string): string {
     CONSTANTS.MASTER_KEY_BUFFER,
     CONSTANTS.MASTER_IV_BUFFER
   )
+
+  const cipherTextPart = encryptor.update(`${plainText}`, 'utf8')
+  const cipherTextFinal = encryptor.final()
   const cipherTextBuffer = Buffer.concat([
-    encryptor.update(`${plainText}`, 'utf8'),
-    encryptor.final()
+    new Uint8Array(cipherTextPart),
+    new Uint8Array(cipherTextFinal)
   ])
+
   const cipherText = cipherTextBuffer.toString('base64')
   return cipherText
 }

@@ -1,3 +1,4 @@
+import { CipherKey } from 'crypto'
 import { InspectOptions } from 'util'
 import { LeveledLogMethod, LogEntry, LoggerOptions } from 'winston'
 
@@ -90,17 +91,17 @@ export interface ApiLoggerConstants {
    */
   GLOBAL_MASTER_IV_BUFFER_VALID: boolean
   /**
-   * Buffer containing the master key.
+   * Uint8Array containing the master key.
    *
-   * @type {Buffer}
+   * @type {Uint8Array}
    */
-  MASTER_KEY_BUFFER: Buffer
+  MASTER_KEY_BUFFER: Uint8Array
   /**
-   * Buffer containing the master IV.
+   * Uint8Array containing the master IV.
    *
-   * @type {Buffer}
+   * @type {Uint8Array}
    */
-  MASTER_IV_BUFFER: Buffer
+  MASTER_IV_BUFFER: Uint8Array
 }
 
 /**
