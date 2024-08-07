@@ -14,6 +14,9 @@ export default function serializer(key: string, value: any): any {
   if (value instanceof Error) {
     return value.stack
   }
+  if (typeof value === 'string') {
+    return value
+  }
   if (value instanceof Map) {
     return { dataType: 'Map', value: Array.from([...value]) }
   }

@@ -1,6 +1,6 @@
 {
   "name": "@am92/api-logger",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Logger for Node Backend Applications",
   "sideEffects": false,
   "types": "dist/index.d.ts",
